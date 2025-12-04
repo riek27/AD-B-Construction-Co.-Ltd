@@ -1,85 +1,7 @@
 // ===== GLOBAL VARIABLES =====
 let currentImageIndex = 0;
-
-// Gallery images for gallery page
-const galleryImages = [
-    {
-        url: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Modern Construction',
-        category: 'construction'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1503387769-00a112127ca0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Architectural Design',
-        category: 'design'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Construction Team',
-        category: 'team'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Building Materials',
-        category: 'materials'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1487956382158-bb926046304a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Construction Site',
-        category: 'construction'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Completed Project',
-        category: 'completed'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'ISSB Blocks',
-        category: 'materials'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1503387769-00a112127ca0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'House Design',
-        category: 'design'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1600585154340-043788447ebf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Modern Architecture',
-        category: 'design'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1600607687644-c7171b42498b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Interior Design',
-        category: 'design'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Luxury Home',
-        category: 'completed'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Construction Workers',
-        category: 'team'
-    }
-];
-
-// Home page gallery images (only 3)
-const homeGalleryImages = [
-    {
-        url: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Modern Construction Project'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'Completed Luxury Home'
-    },
-    {
-        url: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        title: 'ISSB Block Production'
-    }
-];
+let galleryItems = [];
+let filteredGalleryItems = [];
 
 // ===== DOM ELEMENTS =====
 const mobileNavToggle = document.getElementById('mobileNavToggle');
@@ -97,6 +19,8 @@ const lightboxClose = document.getElementById('lightboxClose');
 const lightboxPrev = document.getElementById('lightboxPrev');
 const lightboxNext = document.getElementById('lightboxNext');
 const lightboxImage = document.getElementById('lightboxImage');
+const lightboxTitle = document.getElementById('lightboxTitle');
+const lightboxCategory = document.getElementById('lightboxCategory');
 const galleryGrid = document.getElementById('galleryGrid');
 const contactForm = document.getElementById('contactForm');
 const categoryButtons = document.querySelectorAll('.category-btn');
@@ -152,21 +76,16 @@ function setActiveNavLink() {
 function initializeGallery() {
     if (!galleryGrid) return;
     
-    galleryGrid.innerHTML = '';
+    // Get all gallery items from the DOM
+    galleryItems = Array.from(galleryGrid.querySelectorAll('.gallery-item'));
+    filteredGalleryItems = [...galleryItems];
     
-    galleryImages.forEach((image, index) => {
-        const galleryItem = document.createElement('div');
-        galleryItem.className = `gallery-item ${image.category}`;
-        galleryItem.innerHTML = `
-            <img src="${image.url}" alt="${image.title}" data-index="${index}">
-            <div class="gallery-overlay">
-                <h4>${image.title}</h4>
-            </div>
-        `;
-        galleryGrid.appendChild(galleryItem);
+    // Set up click events for each gallery item
+    galleryItems.forEach((item, index) => {
+        item.addEventListener('click', () => openLightbox(index));
         
-        // Add click event to each gallery item
-        galleryItem.addEventListener('click', () => openLightbox(index));
+        // Ensure each item has the correct data-index
+        item.setAttribute('data-index', index);
     });
 }
 
@@ -174,9 +93,25 @@ function initializeHomeGallery() {
     const homeGallery = document.getElementById('homeGallery');
     if (!homeGallery) return;
     
+    // Add 3 sample images to home gallery
+    const homeImages = [
+        {
+            url: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            title: 'Modern Construction Project'
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            title: 'Completed Luxury Home'
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            title: 'ISSB Block Production'
+        }
+    ];
+    
     homeGallery.innerHTML = '';
     
-    homeGalleryImages.forEach((image, index) => {
+    homeImages.forEach((image, index) => {
         const galleryItem = document.createElement('div');
         galleryItem.className = 'gallery-preview-item';
         galleryItem.innerHTML = `
@@ -211,7 +146,9 @@ function setupGalleryFilter() {
 }
 
 function filterGallery(category) {
-    const galleryItems = document.querySelectorAll('.gallery-item');
+    if (!galleryGrid) return;
+    
+    const galleryItems = galleryGrid.querySelectorAll('.gallery-item');
     
     galleryItems.forEach(item => {
         if (category === 'all' || item.classList.contains(category)) {
@@ -229,6 +166,15 @@ function filterGallery(category) {
             }, 300);
         }
     });
+    
+    // Update filtered items array
+    if (category === 'all') {
+        filteredGalleryItems = Array.from(galleryItems);
+    } else {
+        filteredGalleryItems = Array.from(galleryItems).filter(item => 
+            item.classList.contains(category)
+        );
+    }
 }
 
 function setupEventListeners() {
@@ -321,15 +267,19 @@ function setupEventListeners() {
     
     if (lightboxPrev) {
         lightboxPrev.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
-            updateLightboxImage();
+            if (filteredGalleryItems.length > 0) {
+                currentImageIndex = (currentImageIndex - 1 + filteredGalleryItems.length) % filteredGalleryItems.length;
+                updateLightboxImage();
+            }
         });
     }
     
     if (lightboxNext) {
         lightboxNext.addEventListener('click', () => {
-            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
-            updateLightboxImage();
+            if (filteredGalleryItems.length > 0) {
+                currentImageIndex = (currentImageIndex + 1) % filteredGalleryItems.length;
+                updateLightboxImage();
+            }
         });
     }
     
@@ -347,6 +297,15 @@ function setupEventListeners() {
             if (e.key === 'Escape' && lightboxModal.classList.contains('active')) {
                 lightboxModal.classList.remove('active');
                 document.body.style.overflow = 'auto';
+            }
+            
+            // Navigate lightbox with arrow keys
+            if (lightboxModal.classList.contains('active')) {
+                if (e.key === 'ArrowLeft') {
+                    lightboxPrev.click();
+                } else if (e.key === 'ArrowRight') {
+                    lightboxNext.click();
+                }
             }
         });
     }
@@ -425,16 +384,69 @@ function setupEventListeners() {
 }
 
 function openLightbox(index) {
-    currentImageIndex = index;
+    if (!galleryGrid) return;
+    
+    // Get the clicked item
+    const clickedItem = galleryGrid.querySelector(`.gallery-item[data-index="${index}"]`);
+    
+    if (!clickedItem) return;
+    
+    // Find the index of this item in the filtered array
+    const category = getCurrentFilterCategory();
+    let galleryItemsArray;
+    
+    if (category === 'all') {
+        galleryItemsArray = Array.from(galleryGrid.querySelectorAll('.gallery-item'));
+    } else {
+        galleryItemsArray = Array.from(galleryGrid.querySelectorAll(`.gallery-item.${category}`));
+    }
+    
+    currentImageIndex = galleryItemsArray.findIndex(item => 
+        item.getAttribute('data-index') === index.toString()
+    );
+    
+    // If item not found in filtered array (shouldn't happen), use all items
+    if (currentImageIndex === -1) {
+        galleryItemsArray = Array.from(galleryGrid.querySelectorAll('.gallery-item'));
+        currentImageIndex = galleryItemsArray.findIndex(item => 
+            item.getAttribute('data-index') === index.toString()
+        );
+    }
+    
+    filteredGalleryItems = galleryItemsArray;
+    
     updateLightboxImage();
     lightboxModal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
 function updateLightboxImage() {
-    const image = galleryImages[currentImageIndex];
-    lightboxImage.src = image.url;
-    lightboxImage.alt = image.title;
+    if (!filteredGalleryItems || filteredGalleryItems.length === 0) return;
+    
+    const currentItem = filteredGalleryItems[currentImageIndex];
+    const imgElement = currentItem.querySelector('img');
+    const titleElement = currentItem.querySelector('.gallery-overlay h4');
+    
+    if (imgElement) {
+        lightboxImage.src = imgElement.src;
+        lightboxImage.alt = imgElement.alt;
+        
+        if (titleElement && lightboxTitle) {
+            lightboxTitle.textContent = titleElement.textContent;
+        }
+        
+        if (lightboxCategory) {
+            // Determine category from class list
+            const categories = ['construction', 'design', 'completed', 'materials', 'team'];
+            const itemCategory = categories.find(cat => currentItem.classList.contains(cat));
+            lightboxCategory.textContent = itemCategory ? `Category: ${itemCategory.charAt(0).toUpperCase() + itemCategory.slice(1)}` : '';
+        }
+    }
+}
+
+function getCurrentFilterCategory() {
+    const activeButton = document.querySelector('.category-btn.active');
+    return activeButton ? activeButton.getAttribute('data-category') : 'all';
 }
 
 function initStatsAnimation() {
