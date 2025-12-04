@@ -629,7 +629,7 @@ header {
 /* ===== ABOUT PAGE ===== */
 .about-hero {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                url('assets/arinter.jpg') no-repeat center center/cover;
+                url('assets/turkish.jpg') no-repeat center center/cover;
     color: var(--white);
     padding: 8rem 0 6rem;
     text-align: center;
