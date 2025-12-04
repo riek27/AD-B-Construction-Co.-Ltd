@@ -629,7 +629,7 @@ header {
 /* ===== ABOUT PAGE ===== */
 .about-hero {
     background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                url('https://images.unsplash.com/photo-1503387769-00a112127ca0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;
+                url('assets/arinter.jpg') no-repeat center center/cover;
     color: var(--white);
     padding: 8rem 0 6rem;
     text-align: center;
