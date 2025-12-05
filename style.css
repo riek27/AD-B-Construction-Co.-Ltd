@@ -1,19 +1,34 @@
 /* ===== CSS RESET & BASE STYLES ===== */
 :root {
-    --charcoal: #2c2c2c;
-    --gold: #bfa06b;
-    --gold-light: #d4b98c;
-    --gold-dark: #a08654;
+    /* BRAND COLORS */
+    --black: #1a1a1a;              /* Rich premium black */
+    --charcoal: #2b2b2b;           /* Soft black for text */
+    --gold: #c6a668;               /* Updated premium gold */
+    --gold-light: #e3d2a3;         /* Softer highlight gold */
+    --gold-dark: #947c4a;          /* Deep accent gold */
+
+    /* NEUTRALS */
     --white: #ffffff;
-    --beige: #f5f2ed;
-    --light-gray: #f8f8f8;
+    --off-white: #f7f6f3;          /* Warmer neutral background */
+    --light-gray: #efefef;         /* Clean UI gray */
     --dark-gray: #3a3a3a;
-    --transition: all 0.3s ease;
-    --transition-slow: all 0.5s ease;
-    --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.05);
-    --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.1);
-    --shadow-heavy: 0 15px 40px rgba(0, 0, 0, 0.15);
+
+    /* EFFECTS */
+    --transition-fast: all 0.25s ease;
+    --transition: all 0.35s ease;
+    --transition-slow: all 0.55s ease;
+
+    /* SHADOWS — premium depth */
+    --shadow-light: 0 4px 14px rgba(0, 0, 0, 0.06);
+    --shadow-medium: 0 8px 22px rgba(0, 0, 0, 0.09);
+    --shadow-heavy: 0 15px 45px rgba(0, 0, 0, 0.15);
+
+    /* OPTIONAL BRAND ACCENTS */
+    --border-gold: 1px solid rgba(198, 166, 104, 0.45);
+    --glass-bg: rgba(255, 255, 255, 0.25);
+    --glass-blur: blur(8px);
 }
+
 
 * {
     margin: 0;
